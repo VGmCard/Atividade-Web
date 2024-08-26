@@ -1,35 +1,12 @@
 const express = require('express');
-const xio = require('axios');
-const { default: axios } = require('axios');
+const rotas = require('./routes');
 
-const app = express();
-const port = 3000;
+const app  = express();
 
-app.get('/', (req, res) => {
-    res.send('Hello world');
-});
+app.use(express.json());
+app.use('/api', rotas);
 
-app.get('/index', (req, res) => {
-    res.send('index');
-});
-
-app.get('/consulta-cep/:cep', async (req, res) => {
-    const cep = req.params.cep; //obtendo o cep da url
-if(cepRegex.test(cep)){
-    try {
-        //Fazendo a requisição para a api viaCEP
-        const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-        res.json(response.data); // Retorna os dados da resposta
-    } catch (error){
-        console.error('Erro ao fazer requisição:', error);
-        res.status(500).send('Erro ao consultar CEP')
-    }
-} else{
-    res.status(400).send("Cep Invalido");
-}
-})
-    
-
-app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`)
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 })
